@@ -16,20 +16,20 @@ main {
 }
 
 #prompt {
-    font-size: 3em;
+    font-size: 7em;
     font-weight: bold;
 }
 
 #result {
-    margin: 1em
+    margin: 2em
 }
 
 #codeword {
-    font-size: 2.5em;
+    font-size: 4.5em;
 }
 
 #respelling {
-    font-size: 1.5em;
+    font-size: 2em;
     font-style: italic;
 }
 
@@ -40,7 +40,7 @@ button {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 1.5em;
 }
 
 #start {

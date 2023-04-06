@@ -45,48 +45,59 @@ function main() {
         nextBtn: nextBtn,
     };
 
-    startBtn.addEventListener('click', startGame.bind(context));
-    revealBtn.addEventListener('click', reveal.bind(context));
-    nextBtn.addEventListener('click', goNext.bind(context));
-
-    swapIn(startBtn);
+    new Game(prompt, result, startBtn, revealBtn, nextBtn);
 }
 
-function startGame() {
-    console.log('start');
-    swapOut(this.startBtn);
-    changeItem.apply(this);
-    swapIn(this.revealBtn);
-}
+class Game {
+    constructor(prompt, result, startBtn, revealBtn, nextBtn) {
+        this.prompt = prompt;
+        this.result = result;
+        this.startBtn = startBtn;
+        this.revealBtn = revealBtn;
+        this.nextBtn = nextBtn;
 
-function reveal() {
-    console.log('reveal');
-    swapOut(this.revealBtn);
-    show(this.result);
-    swapIn(this.nextBtn);
-}
+        this.startBtn.addEventListener('click', this.start.bind(this));
+        this.revealBtn.addEventListener('click', this.reveal.bind(this));
+        this.nextBtn.addEventListener('click', this.next.bind(this));
 
-function goNext() {
-    console.log('next', this);
-    swapOut(this.nextBtn);
-    changeItem.apply(this);
-    swapIn(this.revealBtn);
-}
+        this.alphabet = Array.from(ALPHABET);
 
-function changeItem() {
-    this.result.classList.add('hidden');
+        swapIn(this.startBtn);
+    }
 
-    const item = pickItem();
+    start() {
+        swapOut(this.startBtn);
+        this.changeItem();
+        swapIn(this.revealBtn);
+    }
 
-    this.prompt.innerHTML = item.symbol;
-    this.result.innerHTML = `
-        <p id="codeword">${item.codeWord}</p>
-        <p id="respelling">${item.respelling}</p>
-    `;
-}
+    reveal() {
+        swapOut(this.revealBtn);
+        show(this.result);
+        swapIn(this.nextBtn);
+    }
 
-function pickItem() {
-    return ALPHABET[randomInt(ALPHABET.length)];
+    next() {
+        swapOut(this.nextBtn);
+        this.changeItem();
+        swapIn(this.revealBtn);
+    }
+
+    changeItem() {
+        hide(this.result);
+
+        const item = this.pickItem();
+
+        this.prompt.innerHTML = item.symbol;
+        this.result.innerHTML = `
+            <p id="codeword">${item.codeWord}</p>
+            <p id="respelling">${item.respelling}</p>
+        `;
+    }
+
+    pickItem() {
+        return this.alphabet[randomInt(this.alphabet.length)];
+    }
 }
 
 function randomInt(max) {

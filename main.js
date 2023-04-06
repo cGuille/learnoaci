@@ -30,43 +30,39 @@ const ALPHABET = [
 ];
 
 function main() {
-    const prompt = document.getElementById('prompt');
-    const result = document.getElementById('result');
-
-    const startBtn = document.getElementById('start');
-    const revealBtn = document.getElementById('reveal');
-    const nextBtn = document.getElementById('next');
-
-    const context = {
-        prompt: prompt,
-        result: result,
-        startBtn: startBtn,
-        revealBtn: revealBtn,
-        nextBtn: nextBtn,
-    };
-
-    new Game(prompt, result, startBtn, revealBtn, nextBtn);
+    new Game(
+        document.getElementById('prompt'),
+        document.getElementById('result'),
+        document.getElementById('start'),
+        document.getElementById('reveal'),
+        document.getElementById('next'),
+        document.getElementById('restart')
+    );
 }
 
 class Game {
-    constructor(prompt, result, startBtn, revealBtn, nextBtn) {
+    constructor(prompt, result, startBtn, revealBtn, nextBtn, restartBtn) {
         this.prompt = prompt;
         this.result = result;
         this.startBtn = startBtn;
         this.revealBtn = revealBtn;
         this.nextBtn = nextBtn;
+        this.restartBtn = restartBtn;
 
-        this.startBtn.addEventListener('click', this.start.bind(this));
+        const startFn = this.start.bind(this);
+        this.startBtn.addEventListener('click', startFn);
+        this.restartBtn.addEventListener('click', startFn);
         this.revealBtn.addEventListener('click', this.reveal.bind(this));
         this.nextBtn.addEventListener('click', this.next.bind(this));
 
-        this.alphabet = Array.from(ALPHABET);
+        this.initAlphabet();
 
         swapIn(this.startBtn);
     }
 
     start() {
         swapOut(this.startBtn);
+        swapOut(this.restartBtn);
         this.changeItem();
         swapIn(this.revealBtn);
     }
@@ -74,7 +70,13 @@ class Game {
     reveal() {
         swapOut(this.revealBtn);
         show(this.result);
-        swapIn(this.nextBtn);
+
+        if (this.alphabet.length) {
+            swapIn(this.nextBtn);
+        } else {
+            this.initAlphabet();
+            swapIn(this.restartBtn);
+        }
     }
 
     next() {
@@ -95,8 +97,12 @@ class Game {
         `;
     }
 
+    initAlphabet() {
+        this.alphabet = Array.from(ALPHABET);
+    }
+
     pickItem() {
-        return this.alphabet[randomInt(this.alphabet.length)];
+        return this.alphabet.splice(randomInt(this.alphabet.length), 1)[0];
     }
 }
 

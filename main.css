@@ -56,6 +56,10 @@ button {
     color: black;
 }
 
+#restart {
+    background-color: #f44336;
+}
+
 .out {
     display: none;
 }

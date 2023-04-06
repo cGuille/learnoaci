@@ -1,0 +1,65 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    text-align: center;
+}
+
+main {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#prompt {
+    font-size: 3em;
+    font-weight: bold;
+}
+
+#result {
+    margin: 1em
+}
+
+#codeword {
+    font-size: 2.5em;
+}
+
+#respelling {
+    font-size: 1.5em;
+    font-style: italic;
+}
+
+button {
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+#start {
+    background-color: #008CBA;
+}
+
+#reveal {
+    background-color: #4CAF50;
+}
+
+#next {
+    background-color: #e7e7e7;
+    color: black;
+}
+
+.out {
+    display: none;
+}
+
+.hidden {
+    visibility: hidden;
+}

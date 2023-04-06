@@ -30,30 +30,27 @@ const ALPHABET = [
 ];
 
 function main() {
-    new Game(
-        document.getElementById('prompt'),
-        document.getElementById('result'),
-        document.getElementById('start'),
-        document.getElementById('reveal'),
-        document.getElementById('next'),
-        document.getElementById('restart')
-    );
+    window.game = new Game(document);
 }
 
 class Game {
-    constructor(prompt, result, startBtn, revealBtn, nextBtn, restartBtn) {
-        this.prompt = prompt;
-        this.result = result;
-        this.startBtn = startBtn;
-        this.revealBtn = revealBtn;
-        this.nextBtn = nextBtn;
-        this.restartBtn = restartBtn;
+    constructor(doc) {
+        this.gameDisplay = doc.getElementById('game-display');
+        this.scoreboard = doc.getElementById('scoreboard');
+        this.prompt = doc.getElementById('prompt');
+        this.result = doc.getElementById('result');
+        this.startBtn = doc.getElementById('start');
+        this.restartBtn = doc.getElementById('restart');
+        this.revealBtn = doc.getElementById('reveal');
+        this.okBtn = doc.getElementById('ok');
+        this.koBtn = doc.getElementById('ko');
 
         const startFn = this.start.bind(this);
         this.startBtn.addEventListener('click', startFn);
         this.restartBtn.addEventListener('click', startFn);
         this.revealBtn.addEventListener('click', this.reveal.bind(this));
-        this.nextBtn.addEventListener('click', this.next.bind(this));
+        this.okBtn.addEventListener('click', this.ok.bind(this));
+        this.koBtn.addEventListener('click', this.ko.bind(this));
 
         this.initAlphabet();
 
@@ -63,6 +60,9 @@ class Game {
     start() {
         swapOut(this.startBtn);
         swapOut(this.restartBtn);
+        swapOut(this.scoreboard);
+        swapIn(this.gameDisplay);
+
         this.changeItem();
         swapIn(this.revealBtn);
     }
@@ -70,19 +70,39 @@ class Game {
     reveal() {
         swapOut(this.revealBtn);
         show(this.result);
+        swapIn(this.okBtn);
+        swapIn(this.koBtn);
+    }
 
-        if (this.alphabet.length) {
-            swapIn(this.nextBtn);
-        } else {
-            this.initAlphabet();
-            swapIn(this.restartBtn);
-        }
+    ok() {
+        this.score += 1;
+        this.next();
+    }
+
+    ko() {
+        this.next();
     }
 
     next() {
-        swapOut(this.nextBtn);
-        this.changeItem();
-        swapIn(this.revealBtn);
+        swapOut(this.okBtn);
+        swapOut(this.koBtn);
+
+        if (this.alphabet.length) {
+            this.changeItem();
+            swapIn(this.revealBtn);
+        } else {
+            this.scoreboard.innerHTML = `
+                <p id="score-intro">You scored</p>
+                <p id="score">${this.score} / ${this.maxscore}
+            `;
+
+            swapOut(this.gameDisplay);
+            swapIn(this.scoreboard);
+
+            this.initAlphabet();
+            swapIn(this.restartBtn);
+        }
+
     }
 
     changeItem() {
@@ -99,6 +119,8 @@ class Game {
 
     initAlphabet() {
         this.alphabet = Array.from(ALPHABET);
+        this.score = 0;
+        this.maxscore = this.alphabet.length;
     }
 
     pickItem() {

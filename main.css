@@ -20,8 +20,16 @@ main {
     font-weight: bold;
 }
 
-#result {
+#result, #scoreboard {
     margin: 2em
+}
+
+#score-intro {
+    font-size: 2em;
+}
+
+#score {
+    font-size: 4.5em;
 }
 
 #codeword {
@@ -48,16 +56,20 @@ button {
 }
 
 #reveal {
-    background-color: #4CAF50;
-}
-
-#next {
     background-color: #e7e7e7;
     color: black;
 }
 
-#restart {
+#ok {
+    background-color: #4CAF50;
+}
+
+#ko {
     background-color: #f44336;
+}
+
+#restart {
+    background-color: #008CBA;
 }
 
 .out {

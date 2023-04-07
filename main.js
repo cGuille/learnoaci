@@ -57,20 +57,6 @@ class Game {
         swapIn(this.startBtn);
     }
 
-    debugMode() {
-        this.initAlphabet(2);
-
-        this.prompt.innerHTML = '';
-        hide(this.result);
-        swapOut(this.scoreboard);
-        swapOut(this.restartBtn);
-        swapOut(this.revealBtn);
-        swapOut(this.okBtn);
-        swapOut(this.koBtn);
-        swapIn(this.gameDisplay);
-        swapIn(this.startBtn);
-    }
-
     start() {
         swapOut(this.startBtn);
         swapOut(this.restartBtn);
@@ -131,7 +117,10 @@ class Game {
         `;
     }
 
-    initAlphabet(maxItems) {
+    initAlphabet() {
+        const query = new URLSearchParams(location.search);
+        const maxItems = query.get('debug') || Infinity;
+
         this.alphabet = ALPHABET.slice(0, maxItems || Infinity);
         this.score = 0;
         this.maxscore = this.alphabet.length;

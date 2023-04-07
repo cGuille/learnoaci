@@ -52,12 +52,13 @@ class Game {
         this.okBtn.addEventListener('click', this.ok.bind(this));
         this.koBtn.addEventListener('click', this.ko.bind(this));
 
-        this.initAlphabet();
-
         swapIn(this.startBtn);
     }
 
     start() {
+        this.initAlphabet();
+        this.timings = [];
+
         swapOut(this.startBtn);
         swapOut(this.restartBtn);
         swapOut(this.scoreboard);
@@ -68,6 +69,11 @@ class Game {
     }
 
     reveal() {
+        this.timing.elapsedMs = new Date() - this.timing.start;
+        delete this.timing.start;
+        this.timings.push(this.timing);
+        this.timing = null;
+
         swapOut(this.revealBtn);
         show(this.result);
         swapIn(this.okBtn);
@@ -98,9 +104,14 @@ class Game {
 
             swapOut(this.gameDisplay);
             swapIn(this.scoreboard);
-
-            this.initAlphabet();
             swapIn(this.restartBtn);
+
+            // TODO display in UI
+            const f = new Intl.NumberFormat(undefined, { style: 'unit', unit: 'second'});
+            console.table(this.timings
+                .sort((t1, t2) => t2.elapsedMs - t1.elapsedMs)
+                .map(t => ({ symbol: t.item.symbol, elapsed: f.format(t.elapsedMs / 1000) }))
+            );
         }
 
     }
@@ -115,6 +126,8 @@ class Game {
             <p id="codeword">${item.codeWord}</p>
             <p id="respelling">${item.respelling}</p>
         `;
+
+        this.timing = { item: item, start: new Date() };
     }
 
     initAlphabet() {
